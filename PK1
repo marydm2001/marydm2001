@@ -1,0 +1,110 @@
+from operator import itemgetter
+
+
+class chapter:
+    """Глава"""
+
+    def __init__(self, id,name,page , book_id):
+        self.id = id
+        self.name = name
+        self.page = page
+        
+        self. book_id =  book_id
+    
+
+
+class book:
+    """Книга"""
+
+    def __init__(self, id, name_2):
+        self.id = id
+        self.name_2 = name_2
+
+
+class Book_2:
+    """
+    
+    """
+    def __init__(self,  book_id, chapter_id):
+        self. book_id = book_id
+        self.chapter_id =chapter_id
+
+
+
+Book_5 = [
+    book(1, "Война и мир"),
+    book(2, "Ревизор"),
+    book(3, "Гроза"),
+   book(4, "Отелло"),
+    book(5, "Ярмарка тщеславия"),
+]
+
+
+chapter_5 = [
+    chapter(1,"Чизикская аллея", 4, 1),
+    chapter(2,"в которой мисс Шарп и мисс Седли готовятся к открытию кампании",5,  67),
+    chapter(3, " Ребекка перед лицом неприятеля",6, 2),
+    chapter(4,"Зелёный шёлковый кошелёк",7 , 3),
+    chapter(5,"Наш Доббин",8 , 4),
+   chapter(6,"Воксхолл",9 , 5),
+    chapter(7,"Кроули из Королевского Кроули",7 , 6),
+]
+
+book_5 = [
+    Book_2(1, 1),
+   Book_2(2, 2),
+    Book_2(3, 3),
+    Book_2(4, 4),
+    Book_2(5, 7),
+    Book_2(6, 5),
+    Book_2(7, 6),
+  
+]
+
+
+def main():
+    """Основная функция"""
+
+    # Соединение данных один-ко-многим
+    one_to_many = [
+        (m.id, m.page, o.name_2)
+        for o in  Book_5
+        for m in chapter_5
+        if m.book_id == o.id
+    ]
+    many_to_many = [
+        (m.id, m.page, o.name_2)
+        for o in  Book_5
+        for m in chapter_5
+        for relation in book_5
+        if o.id == relation.book_id and m.id == relation.chapter_id
+    ]
+    # Соединение данных многие-ко-многим
+
+
+    print("Задание Б1")
+    res_1 = sorted(one_to_many, key=itemgetter(0))
+    [print(el) for el in res_1]
+   
+    print("\nЗадание Б2")
+    res_2 = []
+    # Перебираем все книги
+    for o in Book_5:
+        # Список глав в книге
+        o_mus = list(filter(lambda i: i[2] == o.name_2, one_to_many))
+        if len(o_mus) > 0:
+            res_2.append((o.name_2, len(o_mus)))
+            res_2.sort(key=itemgetter(1), reverse=True)
+            [print(el) for el in res_2]
+
+    print("\nЗадание Б3")
+    res_3 = {}
+    for m in chapter_5:
+        if 'ов' in m.name:
+            m_orchs = list(filter(lambda x: x[2] == m.name, many_to_many))
+            m_orchs_names = [x for x,_, _ in m_orchs]
+            res_3[m.name] = m_orchs_names
+    print(res_3)
+
+if __name__ == "__main__":
+        main()
