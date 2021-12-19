@@ -1,0 +1,120 @@
+from operator import itemgetter
+
+
+class Color:
+    def __init__(self, id, name, freq, computer_id):
+        self.id = id
+        self.name = name
+        self.freq = freq
+        self.computer_id = computer_id
+
+
+class Tshirt:
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+
+class col:
+    def __init__(self, proc_id, comp_id):
+        self.proc_id = proc_id
+        self.comp_id = comp_id
+
+
+color2 = [
+    Color(1, "красный", 2300, 1),
+    Color(2, "белый", 2400, 3),
+    Color(3, "желтый", 3500, 2),
+    Color(4, "зеленый", 4200, 4),
+    Color(5, "фиолетовый", 6500, 3),
+    Color(6, "розовый", 5643, 1),
+    Color(7, "красный", 3456, 2),
+    Color(8, "фиолетовый", 2950, 1),
+    Color(9, "желтый", 4053, 3),
+]
+Tshirt2 = [
+    Tshirt(1, "С длинным рукавом"),
+    Tshirt(2, "С коротким рукавом"),
+    Tshirt(3, "бесболка"),
+    Tshirt(4, "свитшот"),
+]
+col2 = [
+    col(1, 1),
+    col(2, 3),
+    col(3, 2),
+    col(4, 4),
+    col(5, 3),
+    col(6, 1),
+    col(2, 1),
+    col(8, 1),
+    col(9, 3),
+    col(3, 1),
+    col(8, 3),
+    col(6, 4),
+    col(7, 1),
+    col(7, 3),
+    col(1, 2),
+    col(7, 3),
+    col(2, 2),
+    col(1, 4),
+    col(9, 4),
+]
+
+
+def sortingB1(one_to_many):
+    one_to_many = sorted(one_to_many, key=lambda x: x[0])
+    return one_to_many
+
+
+def sortingB2(one_to_many):
+    res_12_unsorted = []
+    for c in Tshirt2:
+
+        c_micros = list(filter(lambda i: i[2] == c.name, one_to_many))
+
+        if len(c_micros) > 0:
+            res_12_unsorted.append((c.name, len(c_micros)))
+    res12 = sorted(res_12_unsorted, key=lambda x: x[1], reverse=True)
+    return res12
+
+
+def sortingB3(many_to_many):
+    res_13 = {}
+    for m in color2 :
+        if m.name.endswith("1"):
+            m_comps = list(filter(lambda i: i[0] == m.name, many_to_many))
+            m_comps_name = [x[2] for x in m_comps]
+            res_13[m.name] = m_comps_name
+    return res_13
+
+
+def main():
+    one_to_many = [
+        (m.name, m.freq, c.name) for c in Tshirt2  for m in color2 if m.computer_id == c.id
+    ]
+
+    many_to_many = [
+        (m.name, m.freq, c.name)
+        for c in Tshirt2
+        for m in color2
+        for r in col2
+        if c.id == r.comp_id and m.id == r.proc_id
+    ]
+
+    print("Задание Б1")
+
+    res1 = sortingB1(one_to_many)
+    [print(x) for x in res1]
+
+    print("\nЗадание Б2")
+    res12 = sortingB2(one_to_many)
+    [print(x) for x in res12]
+
+    print("\nЗадание Б3")
+    res_13 = sortingB3(many_to_many)
+    for k, v in res_13.items():
+        print(k, v)
+
+
+if __name__ == "__main__":
+    main()
