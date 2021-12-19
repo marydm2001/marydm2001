@@ -1,0 +1,29 @@
+import unittest
+from RK2 import *
+
+class test_RK2(unittest.TestCase):
+    def test_sortingB1(self):
+        one_to_many = [(m.name, m.freq, c.name) for c in Tshirt2  for m in color2 if m.computer_id == c.id]
+        res = sortingB1(one_to_many)
+        self.assertEqual(res,[('белый', 2300, 'с коротким рукавом'),('красный', 2950, 'с длинным рукавом'),('желтый', 4053, 'свитшот'),('черный', 5643, 'с коротким рукавом'),('фиолетовый', 2400, 'бесболка'),('белый', 3500, 'свитшот'),('черный', 6500, 'бесболка'),('фиолетовый', 4200, 'с коротким рукавом'),('черный', 3456, 'с длинным рукавом ')])
+    def test_sortingB2(self):
+        one_to_many = [(m.name, m.freq, c.name) for c in Tshirt2 for m in color2  if m.computer_id == c.id]
+        res = sortingB2(one_to_many)
+        self.assertEqual(res,[('с коротким рукавом', 3),('с длинным рукавом', 3),('бесболка', 2),('свитшот', 1)])
+    def test_sortingB3(self):
+        many_to_many = [
+        (m.name, m.freq, c.name)
+        for c in Tshirt2
+        for m in color2
+        for r in col2
+        if c.id == r.comp_id and m.id == r.proc_id
+        ]
+        res = sortingB3(many_to_many)
+        self.assertEqual(res,{"белый" : ['С длинным рукавом', 'С коротким рукавом', 'бесболка'],"розовый" : ['бесболка','С коротким рукавом', 'С длинным рукавом'],"желтый" : ['С длинным рукавом', 'бесболка']})
+
+
+
+
+if __name__ == "__name__":
+    unittest.main()
+    #python -m unittest test_RK2.py
